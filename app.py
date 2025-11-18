@@ -5,7 +5,7 @@ import datetime
 # ------------------------------
 # MongoDB Connection
 # ------------------------------
-MONGO_URI = st.secrets["MONGO_URI"]
+MONGO_URI = "mongodb+srv://SDMHUB_DB:SDM123456@sdmhub.anngz6n.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGO_URI)
 db = client["studentDB"]
 collection = db["registrations"]
@@ -78,10 +78,16 @@ with st.container():
 # Handle Submission
 # ------------------------------
 if submit:
-    if name and usn and email:
+    # Email must end with @gmail.com
+    valid_email = email.endswith("@gmail.com")
+
+    # USN must start with 2SD (case-insensitive)
+    valid_usn = usn.upper().startswith("2SD")
+
+    if name and valid_usn and valid_email:
         data = {
             "name": name,
-            "usn": usn,
+            "usn": usn.upper(),
             "email": email,
             "submitted_at": datetime.datetime.now()
         }
@@ -89,6 +95,11 @@ if submit:
 
         st.success("🎉 Registration successful!")
         st.balloons()
-    else:
-        st.error("⚠️ Please fill all fields correctly.")
 
+    else:
+        if not valid_email:
+            st.error("⚠️ Email must end with @gmail.com")
+        if not valid_usn:
+            st.error("⚠️ USN must start with '2SD'")
+        if not name:
+            st.error("⚠️ Name cannot be empty")
