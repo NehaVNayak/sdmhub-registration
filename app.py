@@ -5,7 +5,7 @@ import datetime
 # ------------------------------
 # MongoDB Connection
 # ------------------------------
-MONGO_URI = "mongodb+srv://SDMHUB_DB:SDM123456@sdmhub.anngz6n.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI = st.secrets["MONGO_URI"]
 client = MongoClient(MONGO_URI)
 db = client["studentDB"]
 collection = db["registrations"]
@@ -91,3 +91,4 @@ if submit:
         st.balloons()
     else:
         st.error("⚠️ Please fill all fields correctly.")
+
